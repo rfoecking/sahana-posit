@@ -2,7 +2,8 @@
 require_once('model/dao.php');
 require_once('model/Model.php');
 global $global;
-$dao = new DAO();
+global $dao;
+$dao = new DAO($global["db"]);
 
 
 function shn_posit_default()
@@ -15,32 +16,25 @@ function shn_posit_receive()
 	global $dao;
 	$dao->saveFind($_REQUEST['guid'],$_REQUEST['projectId'],$_REQUEST['description'],$_REQUEST['barcodeId'],$_REQUEST['name'],
 	$_REQUEST['latitude'],$_REQUEST['longitude'],$_REQUEST['revision'],$_REQUEST['imei']);
-   print "did it work: " . $name;
-   print "<p> Received! </p>";
-   print "<p>Imei: " . $_REQUEST['imei'] . "</p>";
-   print "<p>Guid: " . $_REQUEST['guid'] . "</p>";
-   print "<p>Name: " . $_REQUEST['name'] . "</p>";
-   print "<p>Description: " . $_REQUEST['description'] . "</p>";
-   print "<p>Latitude: " . $_REQUEST['latitude'] . "</p>";
-   print "<p>Longitude: " . $_REQUEST['longitude'] . "</p>";
-   print "<p>Revision: " . $_REQUEST['revision'] . "</p>";
-
 }
 
 function shn_posit_show()
 {
-   global $global;
-   $db=$global["db"];
-   $sql = "SELECT * FROM `posit_find`";
-   $result = $db->execute($sql);
-
-   while(!$result->EOF)
-    {
- 	print $result->fields['name'];
- 	$result->MoveNext();
-    }
-
-
+	global $dao;
+	$finds =  $dao->getAllFinds();
+	$counter = 0;
+	while($counter!=count($finds,1)/count($finds,0)-1)
+	{
+		print "<p><strong>Name: " .  $finds['name'][$counter] . "</strong></p>";
+		print "<p>ID: " .  $finds['id'][$counter] . "</p>";
+		print "<p>Description: " .  $finds['description'][$counter] . "</p>";
+		print "<p>Barcode: " .  $finds['barcodeId'][$counter] . "</p>";
+		print "<p>Latitude: " . $finds['latitude'][$counter] . "</p>";
+		print "<p>Longitude: " .  $finds['longitude'][$counter] . "</p>";
+		print "<p>Revision: " .  $finds['revision'][$counter] . "</p>";
+		print "<p>Imei: " . $finds['imei'][$counter] . "</p>";
+		$counter = $counter + 1;
+	}
 }
 
 ?>
