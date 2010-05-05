@@ -76,4 +76,20 @@ global $global;
  		}
 		return $finds;
 	}
+function getFind($id)
+	{
+		$sql = "SELECT * FROM `posit_find` where id = " . $id;
+		$result = $this->execute($sql);
+		//$result->moveNext();
+ 		$find['id'] = $result->fields['id'];
+		$find['projectId'] = $result->fields['project_id'];
+		$find['description'] = $result->fields['description'];
+		$find['barcodeId']= $result->fields['barcode_id'];
+		$find['name']= $result->fields['name'];
+		$find['latitude'] = $result->fields['latitude'];
+		$find['longitude'] = $result->fields['longitude'];
+		$find['revision'] = $result->fields['revision'];
+		$find['imei'] = $result->fields['imei'];
+		return $find;
+	}
 }
